@@ -32,3 +32,8 @@ README.md
 *.exe
 *.out
 *.app
+
+.vscode
+.Ds_Store
+
+build
