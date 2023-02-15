@@ -75,6 +75,7 @@ struct epoll_event
 	epoll_data_t data;
 };
 
+// epoll 相关信息
 struct co_epoll_res
 {
 	int size;

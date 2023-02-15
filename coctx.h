@@ -33,6 +33,7 @@ struct coctx_t
 	void *regs[ 14 ];
 #endif
 	size_t ss_size;
+	// 指向协程栈
 	char *ss_sp;
 	
 };

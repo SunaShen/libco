@@ -28,6 +28,7 @@
 struct stCoRoutine_t;
 struct stShareStack_t;
 
+// 协程配置参数
 struct stCoRoutineAttr_t
 {
 	int stack_size;
@@ -54,7 +55,9 @@ void    co_reset(stCoRoutine_t * co);
 
 stCoRoutine_t *co_self();
 
+// 向epoll管理器中添加监听事件
 int		co_poll( stCoEpoll_t *ctx,struct pollfd fds[], nfds_t nfds, int timeout_ms );
+// epoll管理器的主循环，pfn注册为退出循环的函数，每一轮事件后执行
 void 	co_eventloop( stCoEpoll_t *ctx,pfn_co_eventloop_t pfn,void *arg );
 
 //3.specific
@@ -63,7 +66,7 @@ int 	co_setspecific( pthread_key_t key, const void *value );
 void *	co_getspecific( pthread_key_t key );
 
 //4.event
-
+// 获取当前协程的epoll调度器
 stCoEpoll_t * 	co_get_epoll_ct(); //ct = current thread
 
 //5.hook syscall ( poll/read/write/recv/send/recvfrom/sendto )

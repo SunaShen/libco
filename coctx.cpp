@@ -107,18 +107,24 @@ int coctx_make(coctx_t* ctx, coctx_pfn_t pfn, const void* s, const void* s1) {
   return 0;
 }
 #elif defined(__x86_64__)
+// 创建coctx信息，包含栈空间和上下文(寄存器)信息
 int coctx_make(coctx_t* ctx, coctx_pfn_t pfn, const void* s, const void* s1) {
+  // 在协程栈空间中预留返回地址
   char* sp = ctx->ss_sp + ctx->ss_size - sizeof(void*);
+  // 将栈地址16字节对齐
   sp = (char*)((unsigned long)sp & -16LL);
 
   memset(ctx->regs, 0, sizeof(ctx->regs));
+  // 将函数pfn赋值给sp，存入协程栈，作为当前协程需要执行的任务函数
+  // 执行coctx_swap时，会根据协程栈找到需要执行的任务函数
   void** ret_addr = (void**)(sp);
   *ret_addr = (void*)pfn;
 
+  // 记录栈地址
   ctx->regs[kRSP] = sp;
-
+  // 记录任务函数地址
   ctx->regs[kRETAddr] = (char*)pfn;
-
+  // 记录两个输入参数
   ctx->regs[kRDI] = (char*)s;
   ctx->regs[kRSI] = (char*)s1;
   return 0;
